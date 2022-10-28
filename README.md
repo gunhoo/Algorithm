@@ -1,2 +1,2 @@
-# SWEA
+# Algorithms
  
