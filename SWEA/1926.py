@@ -1,21 +1,3 @@
-# T = int(input())
-#
-# result_list = []
-#
-# for test_case in range(1, T + 1):
-#     case = int(input())
-#     list = []
-#     for i in range(1, case+1):
-#         list.append(str(i))
-#     str = " ".join(list)
-#     print(str)
-#     str = str.replace("3", "-")
-#     str = str.replace("6", "-")
-#     str = str.replace("9", "-")
-#     print(str)
-
-
-
 case = int(input())
 list = []
 for i in range(1, case+1):
