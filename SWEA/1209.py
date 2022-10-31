@@ -29,7 +29,7 @@ for test_case in range(1, 11):
 
     sum = 0
     for i in range(0,100):
-        sum += arr[99-i][i]
+        sum += arr[i][i]
         if max < sum:
             max = sum
 
