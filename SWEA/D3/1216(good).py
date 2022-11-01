@@ -18,11 +18,6 @@ for test_case in range(1, 11):
             while k < 100-max:
                 if arr[i][j:j+max+k] == arr[i][j:j+max+k][::-1] and len(arr[i][j:j+max+k]) > max:
                     max = len(arr[i][j:j+max+k])
-<<<<<<< HEAD
-=======
-                    #print("1. i: {}, j: {}, arr max value updated: {}".format(i, j, max))
-                    #j = -1
->>>>>>> 7bbfb374f91f744485d6e56fa48317e630bf5125
                 k += 1
             j += 1
         i += 1
@@ -39,11 +34,6 @@ for test_case in range(1, 11):
             while k < 100-max:
                 if r_arr[i][j:j+max+k] == r_arr[i][j:j+max+k][::-1] and len(r_arr[i][j:j+max+k]) > max:
                     max = len(r_arr[i][j:j+max+k])
-<<<<<<< HEAD
-=======
-                    #print("1. i: {}, j: {}, arr max value updated: {}".format(i, j, max))
-                    #j = -1
->>>>>>> 7bbfb374f91f744485d6e56fa48317e630bf5125
                 k += 1
             j += 1
         i += 1
