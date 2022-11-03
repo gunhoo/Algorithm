@@ -16,7 +16,7 @@ for test_case in range(1, T+1):
             y -= dy[idx]
             x -= dx[idx]
             idx = (idx+1)%4
-            arr[y][x] = i
+            #arr[y][x] = i
             y += dy[idx]
             x += dx[idx]
 
