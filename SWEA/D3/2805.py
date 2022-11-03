@@ -14,12 +14,5 @@ for test_case in range(1, T+1):
         sum += arr[i][i-n//2:n-i+n//2]
     for i in sum:
         ans += int(i)
-    # sum += arr[n//2]
-
 
     print("#{} {}".format(test_case, ans))
-    # for i in range(len(arr)):
-    #     print(arr[i], end="")
-    #     if (i+1)%10 == 0 :
-    #         print()
-    # print()
