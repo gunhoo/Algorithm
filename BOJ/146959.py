@@ -1,15 +1,15 @@
 N = int(input())
-h = list(map(int, input().split()))
-arr = [0]*N
+hs = list(map(int, input().split()))
+max_h = 0
+ans = 0
+cnt = 0
 
-for i in range(N):
-    ans = 0
+for h in hs:
+    if h > max_h:
+        max_h = h
+        cnt = 0
+    else:
+        cnt += 1
+    ans = max(ans, cnt)
 
-    for j in range(i+1, N):
-        if i>0 and h[i] < h[i-1]:
-            break
-        if h[i] > h[j]:
-            ans += 1
-        else: break
-    arr[i] = ans
-print(max(arr))
+print(ans)
