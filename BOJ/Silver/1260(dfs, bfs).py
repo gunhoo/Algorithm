@@ -28,7 +28,6 @@ dfs_visit, bfs_visit = [0]*(n+1), [0]*(n+1)
 for _ in range(m):
     x, y = map(int, input().split())
     graph[x][y], graph[y][x] = 1, 1
-
 dfs(v)
 print()
 bfs(v)
