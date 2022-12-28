@@ -5,5 +5,5 @@ studying algorithms with Korean sites
 https://swexpertacademy.com/main/main.do
 2. Programmers
 https://programmers.co.kr/
-3. acmicpc
+3. boj
 https://www.acmicpc.net/
