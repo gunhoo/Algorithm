@@ -23,13 +23,20 @@ public class Hello {
 		char ch = 'a';
 		String s = "ABC";
 		
-		Scanner scanner = new Scanner(System.in);
-		int num = scanner.nextInt();
-		int num2 = scanner.nextInt();
-		String num3 = scanner.nextLine();
+//		Scanner scanner = new Scanner(System.in);
+//		int num = scanner.nextInt();
+//		int num2 = scanner.nextInt();
+//		String num3 = scanner.nextLine();
 		
-		System.out.println(num+num2);
-		System.out.println(num3);
+//		System.out.println(num+num2);
+//		System.out.println(num3);
+		
+		String[] members = new String[3];
+		String[] newMembers = {"Jason", "Hugh", "Lee"};
+
+		for (String e : newMembers) {
+			System.out.println(e+"이");
+		}
 		
 	}
 
