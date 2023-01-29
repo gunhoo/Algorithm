@@ -1,7 +1,9 @@
 package Gold;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class BJ_15681_트리와쿼리 {
 /** 알고리즘 스터디 #1
@@ -34,11 +36,12 @@ public class BJ_15681_트리와쿼리 {
 		}
 	}
 	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int n = sc.nextInt();
-		int r = sc.nextInt();
-		int q = sc.nextInt();
+	public static void main(String[] args) throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int n = Integer.parseInt(st.nextToken());
+		int r = Integer.parseInt(st.nextToken());
+		int q = Integer.parseInt(st.nextToken());
 		tree = new ArrayList[n+1];
 		
 //		for(int i = 0; i<= n ; i++) {
@@ -49,8 +52,9 @@ public class BJ_15681_트리와쿼리 {
 		visited = new boolean[n+1];
 		
 		for(int idx = 0; idx<n-1; idx++) {
-			int u = sc.nextInt();
-			int v = sc.nextInt();
+			st = new StringTokenizer(br.readLine());
+			int u = Integer.parseInt(st.nextToken());
+			int v = Integer.parseInt(st.nextToken());
 			if(tree[u] != null) {
 				tree[u].add(v);
 				if(tree[v] != null) {
@@ -80,7 +84,8 @@ public class BJ_15681_트리와쿼리 {
 		countSubtreeNodes(r, n);
 		
 		for(int idx = 0; idx < q; idx++) {
-			int u = sc.nextInt();
+			st = new StringTokenizer(br.readLine());
+			int u = Integer.parseInt(st.nextToken());
 			
 			System.out.println(size[u]);
 		}
