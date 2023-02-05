@@ -5,6 +5,7 @@
 # Log file
 *.log
 .settings
+*.project
 /bin
 
 # BlueJ files
