@@ -13,7 +13,7 @@ public class BJ_15686 {
 	private static boolean[] visited;
 	private static int m;
 	private static int min = Integer.MAX_VALUE;
-	
+	static int totalCount =0;
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -36,9 +36,10 @@ public class BJ_15686 {
 		visited = new boolean[chickens.size()];
 		backtracking(0,0);
 		System.out.println(min);
-		
+		System.out.println(totalCount);
 	}
 	private static void backtracking(int depth, int count) {
+		totalCount++;
 		if(depth == m) {
 			int chickenDistance = 0;
 			for(int i = 0; i< homes.size();i++) {// 모든 집에 대해
