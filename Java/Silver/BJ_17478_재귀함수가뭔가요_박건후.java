@@ -1,9 +1,11 @@
+package Silver;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-public class BJ_17478_재귀함수가뭔가요 {
+public class BJ_17478_재귀함수가뭔가요_박건후 {
 	static BufferedWriter bw;
 	private static String underBar = "____";
 	public static void main(String[] args) throws Exception {
