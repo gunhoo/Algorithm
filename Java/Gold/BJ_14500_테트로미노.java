@@ -46,23 +46,24 @@ public class BJ_14500_테트로미노 {
 		bfs(0,0, 1); // x, y, depth
 		System.out.println(max);
 	}
-	static int[] dx = {1,-1,0,0};
-	static int[] dy = {0,0,1,-1};
+	static int[] dx = {1,0,0,-1}; // 하 우 좌 상
+	static int[] dy = {0,1,-1,0};
 	static Queue<Node> q = new LinkedList<>();
+	
 	private static void bfs(int a, int b, int countFour){
 		// int countFour = 1; // bfs시작부터 하나 골랐으니 1부터 시작
 		if(countFour == 4){ // 종료 조건
+			System.out.print("종료조건 들어왔다: "+a+" "+b);
+			System.out.println("  | max : "+max+" tmp Max : "+tmpMax);
 			tmpMax += map[a][b];
 			max = Math.max(max, tmpMax);
 			tmpMax -= map[a][b];
 			countFour--;
-			System.out.print("종료조건 들어왔다: "+a+" "+b);
-			System.out.println("  | max : "+max+" tmp Max : "+tmpMax+" cF: "+countFour);
+			
 			return;
 		}
 		
 		q.offer(new Node(a, b));
-		// 
 		visited[a][b]= true;
 		while(!q.isEmpty() && countFour < 4){
 			Node node = q.poll();
@@ -73,11 +74,9 @@ public class BJ_14500_테트로미노 {
 				if( 0<= nx && nx<n && 0<=ny && ny<m && visited[nx][ny] == false){ // 조건만족하면
 					visited[nx][ny] = true; // 1개 탐색하고 그걸 트루
 					q.offer(new Node(nx, ny));
-					//tmpMax += map[nx][ny];
-					// tmpMax += map[nx][ny]; // 그 안에 있는 값을 정답 후보군에 더해준다
-					System.out.println("nx: "+nx + " ny : "+ny+" tmpMax : "+tmpMax+" cF: "+countFour);
+					System.out.println("bfs보내주는값\n nx: "+nx + " ny : "+ny+"  tmpMax : "+tmpMax+" cF: "+countFour);
 					bfs(nx, ny, countFour+1); // 4개 채우면 탈출하기 위해 
-					for(Node n : q) System.out.println(n.x+" "+n.y);
+					visited[nx][nx] = false;
 				}
 			}
 			tmpMax -= map[node.x][node.y];
