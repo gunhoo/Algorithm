@@ -2,6 +2,8 @@ package Gold;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -18,6 +20,7 @@ import java.util.StringTokenizer;
  * bfs로 풀어야해 
  * 2. 풀이시간
  * 10:38~11:46
+ * 9:11~
  * @author Gunhoo
  *
  */
@@ -40,8 +43,55 @@ public class BJ_14500_테트로미노 {
 				map[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-		dfs(0,0,1); // x, y, depth
+		bfs(0,0, 1); // x, y, depth
 		System.out.println(max);
+	}
+	static int[] dx = {1,-1,0,0};
+	static int[] dy = {0,0,1,-1};
+	static Queue<Node> q = new LinkedList<>();
+	private static void bfs(int a, int b, int countFour){
+		// int countFour = 1; // bfs시작부터 하나 골랐으니 1부터 시작
+		if(countFour == 4){ // 종료 조건
+			tmpMax += map[a][b];
+			max = Math.max(max, tmpMax);
+			tmpMax -= map[a][b];
+			countFour--;
+			System.out.print("종료조건 들어왔다: "+a+" "+b);
+			System.out.println("  | max : "+max+" tmp Max : "+tmpMax+" cF: "+countFour);
+			return;
+		}
+		
+		q.offer(new Node(a, b));
+		// 
+		visited[a][b]= true;
+		while(!q.isEmpty() && countFour < 4){
+			Node node = q.poll();
+			tmpMax += map[node.x][node.y];
+			for(int i = 0 ; i< 4 ; i++){
+				int nx = node.x + dx[i];
+				int ny = node.y + dy[i];
+				if( 0<= nx && nx<n && 0<=ny && ny<m && visited[nx][ny] == false){ // 조건만족하면
+					visited[nx][ny] = true; // 1개 탐색하고 그걸 트루
+					q.offer(new Node(nx, ny));
+					//tmpMax += map[nx][ny];
+					// tmpMax += map[nx][ny]; // 그 안에 있는 값을 정답 후보군에 더해준다
+					System.out.println("nx: "+nx + " ny : "+ny+" tmpMax : "+tmpMax+" cF: "+countFour);
+					bfs(nx, ny, countFour+1); // 4개 채우면 탈출하기 위해 
+					for(Node n : q) System.out.println(n.x+" "+n.y);
+				}
+			}
+			tmpMax -= map[node.x][node.y];
+		}
+		// while문이 한번 끝나면 a,b 에서 볼 수 있는 4가지 옵션 고른다.
+	}
+	static class Node{
+		int x, y;
+		public Node(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+		
+
 	}
 	private static void dfs(int a, int b, int depth) {
 		if( depth == 4) {
