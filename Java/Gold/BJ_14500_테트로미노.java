@@ -2,8 +2,6 @@ package Gold;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 /**
@@ -12,76 +10,71 @@ import java.util.StringTokenizer;
  * 1. 풀이방법
  * bfs인데 조건을 상하죄우 아니고 각모양별로dxdy따로 만들어서
  * 1,1 ~ n,m까지 탐색하여(완전탐색)max값 업데이트하기
- *  > 각 모양별 dxdy 조건 만들기..? 너무 많은 경우의 수(모양 뒤집어도 되니깐)
+ *  > 각 모양별 dxdy 조건 만들기
+ *   	> 너무 많은 경우의 수(모양 뒤집어도 되니깐)
  * 1-2 풀이방법2
  * 그냥 본인 위치에서 dfs 돌리는데 깊이 4가 되면 종료
- * > 잘못됐어
- * 1-3 풀이방법3
- * bfs로 풀어야해 
  * 2. 풀이시간
- * 10:38~11:46
- * 9:11~
+ * 10:38~11:46 1시간 (1 bfs 구현 시간낭비)
+ * 9:11~9:50 40분 (1-2 ㅗ 모양 탐색 못해)
+ * 10:40~11:40 1시간 (1.2에서 ㅗ 모양 추가)
  * @author Gunhoo
  *
  */
 public class BJ_14500_테트로미노 {
-	static int[][] map;
-	static int max = 0;
-	static boolean[][] visited;
 	static int n,m;
+	static int[][] map;
+	static boolean[][] visited;
+	static int max = 0;
 	static int tmpMax = 0;
+	static int[] dx = {1,0,0,-1}; // 하 우 좌 상
+	static int[] dy = {0,1,-1,0};
+	
  	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
 		m = Integer.parseInt(st.nextToken());
-		map = new int[n][m];
-		visited = new boolean[n][m];
-		for(int i = 0 ; i<n ; i++) {
+		map = new int[n+2][m+2]; // 테두리 둘러쌈
+		visited = new boolean[n+2][m+2];
+		for(int i = 1 ; i<=n ; i++) {
 			st = new StringTokenizer(br.readLine());
-			for(int j = 0 ; j < m ; j++) {
+			for(int j = 1 ; j <= m ; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
-		bfs(0,0, 1); // x, y, depth
+		for(int i = 1 ; i <= n ;i++)
+			for(int j = 1; j <= m ; j++) {
+				visited[i][j] = true; // 본인은 선택하고
+				tmpMax = map[i][j]; // max후보에 더해줌
+				dfs(i,j, 1); // x, y, depth(본인은무조건 선택하고 시작하므로 1부터 시작)
+				visited[i][j] = false; // 본인차례 끝나면 다시 방문할 수 있으므로 false
+			}
 		System.out.println(max);
 	}
-	static int[] dx = {1,0,0,-1}; // 하 우 좌 상
-	static int[] dy = {0,1,-1,0};
-	static Queue<Node> q = new LinkedList<>();
 	
-	private static void bfs(int a, int b, int countFour){
-		// int countFour = 1; // bfs시작부터 하나 골랐으니 1부터 시작
-		if(countFour == 4){ // 종료 조건
-			System.out.print("종료조건 들어왔다: "+a+" "+b);
-			System.out.println("  | max : "+max+" tmp Max : "+tmpMax);
-			tmpMax += map[a][b];
-			max = Math.max(max, tmpMax);
-			tmpMax -= map[a][b];
-			countFour--;
-			
-			return;
+	private static void dfs(int a, int b, int depth) {
+		if(depth == 1) {// 상좌우(ㅗ), 상하좌(ㅓ), 상하우(ㅏ), 하좌우(ㅜ) 탐색 후 max값 업데이트
+			max = Math.max(max, (map[a][b]+map[a-1][b]+map[a][b-1]+map[a][b+1])); // 상좌우(ㅗ)
+			max = Math.max(max, (map[a][b]+map[a-1][b]+map[a+1][b]+map[a][b-1])); // 상하좌(ㅓ)
+			max = Math.max(max, (map[a][b]+map[a-1][b]+map[a+1][b]+map[a][b+1])); // 상하우(ㅏ)
+			max = Math.max(max, (map[a][b]+map[a+1][b]+map[a][b-1]+map[a][b+1])); // 하좌우(ㅜ)
 		}
-		
-		q.offer(new Node(a, b));
-		visited[a][b]= true;
-		while(!q.isEmpty() && countFour < 4){
-			Node node = q.poll();
-			tmpMax += map[node.x][node.y];
-			for(int i = 0 ; i< 4 ; i++){
-				int nx = node.x + dx[i];
-				int ny = node.y + dy[i];
-				if( 0<= nx && nx<n && 0<=ny && ny<m && visited[nx][ny] == false){ // 조건만족하면
-					visited[nx][ny] = true; // 1개 탐색하고 그걸 트루
-					q.offer(new Node(nx, ny));
-					System.out.println("bfs보내주는값\n nx: "+nx + " ny : "+ny+"  tmpMax : "+tmpMax+" cF: "+countFour);
-					bfs(nx, ny, countFour+1); // 4개 채우면 탈출하기 위해 
-					visited[nx][nx] = false;
-				}
+		if( depth == 4) { // 종료조건
+			max = Math.max(tmpMax, max); // 비교후 업데이트
+			return; // 종료
+		}
+		for(int i = 0 ; i< 4 ; i++){ // 4방탐색
+			int nx = a+ dx[i]; 
+			int ny = b + dy[i];
+			if( 0< nx && nx<=n && 0<ny && ny<=m && visited[nx][ny] == false){ // 조건만족하면
+				visited[nx][ny] = true; // 1개 탐색하고 그걸 dfs(재귀)에서 다시방문하지 않기 위해 트루
+				tmpMax += map[nx][ny]; // 그 값을 max후보(tmpMax)에 누적해서 더해주고
+				dfs(nx, ny, depth+1); // 깊이 1추가해서 dfs(재귀) 
+				visited[nx][ny] = false; // 1개 탐색종료하고 그걸 나중에 다시 방문해야하니 false로 초기화
+				tmpMax -= map[nx][ny]; // max값 업데이트 됐으니 tmpMax는 방문노드의 값 빼줌
 			}
-			tmpMax -= map[node.x][node.y];
 		}
-		// while문이 한번 끝나면 a,b 에서 볼 수 있는 4가지 옵션 고른다.
 	}
 	static class Node{
 		int x, y;
@@ -89,32 +82,5 @@ public class BJ_14500_테트로미노 {
 			this.x = x;
 			this.y = y;
 		}
-		
-
 	}
-	private static void dfs(int a, int b, int depth) {
-		if( depth == 4) {
-			if(tmpMax > max) {
-				max = tmpMax;
-				System.out.println("***max : "+max);
-			}
-			tmpMax -= map[a][b];
-			visited[a][b] = false;
-			return;
-		}
-		visited[a][b] = true; 
-		for(int i = 0 ; i< n ; i++) {
-			for(int j = 0 ; j< m ; j++) {
-				if(visited[i][j]==false) { // 아직 방문 안한 친구들
-					visited[i][j] = true;// 본인은 트루로 바꿔주고
-					System.out.println("tmpMax: "+tmpMax);
-					tmpMax += map[i][j];
-					System.out.println("map: "+map[i][j]);
-					dfs(i,j, depth++); // 자신의 위치에서 depth+1넘겨주고 다시 dfs
-					System.out.println("tmpMax after dfs: "+tmpMax);
-				}
-			}
-		}
-	}
-
 }
