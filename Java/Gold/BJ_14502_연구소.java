@@ -72,8 +72,7 @@ public class BJ_14502_연구소 {
 		}
 	}
 	
-	private static void bfs() {
-		for(int i = 0 ; i< map.length ; i++) { // 현재 map을 복사한다 
+	private static void bfs() {		for(int i = 0 ; i< map.length ; i++) { // 현재 map을 복사한다 
 			tmpMap[i] = Arrays.copyOf(map[i], map[i].length);
 		}
 		for(int v = 0; v< totalVirus; v++) { // 모든 바이러스에 대해 
