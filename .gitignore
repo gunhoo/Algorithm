@@ -1,4 +1,14 @@
 ### Java ###
+
+.idea
+*.iml
+/bin/
+.classpath
+.project
+out
+.metadata
+
+
 # Compiled class file
 *.class
 
