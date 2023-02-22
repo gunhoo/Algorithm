@@ -33,25 +33,25 @@ public class BJ_15685_드래곤커브 {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
-		int[][] dragonCurvs = new int[n][4];
+		int[] dragonCurve = new int[4];
 		for(int i = 0 ; i<n ; i++) {
 			st = new StringTokenizer(br.readLine());
-			dragonCurvs[i][0]= Integer.parseInt(st.nextToken());
-			dragonCurvs[i][1]= Integer.parseInt(st.nextToken());
-			dragonCurvs[i][2]= Integer.parseInt(st.nextToken());
-			dragonCurvs[i][3]= Integer.parseInt(st.nextToken());
-			makeCurve(dragonCurvs[i]);
+			dragonCurve[0]= Integer.parseInt(st.nextToken());
+			dragonCurve[1]= Integer.parseInt(st.nextToken());
+			dragonCurve[2]= Integer.parseInt(st.nextToken());
+			dragonCurve[3]= Integer.parseInt(st.nextToken());
+			makeCurve(dragonCurve);
 		}
 		
 		System.out.println(count()); // 정답 출력
 	}
 	
-	private static void makeCurve(int[] dragonCurvs) { // 입력에 대해
+	private static void makeCurve(int[] dragonCurve) { // 입력에 대해
 		ArrayDeque<Integer> stack = new ArrayDeque<>();
-		stack.add(dragonCurvs[2]); // 방향을 넣어줘
+		stack.add(dragonCurve[2]); // 방향을 넣어줘
 		 
 		/*  스택에 있는거를 뒤에서부터 꺼내서 (+1)%4 해주고 기존스택 뒤에 더해줘 */
-		for(int i = 0; i< dragonCurvs[3]; i++) { // 세대수까지 반복
+		for(int i = 0; i< dragonCurve[3]; i++) { // 세대수까지 반복
 			ArrayDeque<Integer> newStack = new ArrayDeque<>(); // 새로운 세대
 			while(!stack.isEmpty()) { // 기존 세대 다 빼서
 				int tmp = stack.removeLast(); // 뒤에서부터 뽑아서
@@ -61,8 +61,8 @@ public class BJ_15685_드래곤커브 {
 			stack = newStack; // stack 업데이트
 		}
 		int size = stack.size(); // 그리는 횟수
-		int nx = dragonCurvs[0]; // x좌표
-		int ny = dragonCurvs[1]; // y좌표
+		int nx = dragonCurve[0]; // x좌표
+		int ny = dragonCurve[1]; // y좌표
 		map[ny][nx] = 1;
 		for(int i = 0 ; i< size ; i++) { 
 			int dir = stack.removeFirst(); // 앞에서부터 그려야지
@@ -72,7 +72,7 @@ public class BJ_15685_드래곤커브 {
 		}
 	}
 	
-	private static int count() { // dragon curv 세주는 함수
+	private static int count() { // dragon curve 세주는 함수
 		int sum = 0;
 		for(int i = 0; i< 100; i++) { // 모든 곳 탐색하면서
 			for(int j = 0; j< 100 ; j++) { // 크기가 1인 정사각형에 모든 값이 1이면 정답 증가
