@@ -2,7 +2,11 @@ package Gold;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 /**
@@ -11,7 +15,11 @@ import java.util.StringTokenizer;
  * - 드래곤 커브는 어케 입력? 
  * 		- 재귀로 불러서 이어 붙이기?
  * 정답 - 0,0부터 99,99까지 보면서 [i][j],[i][j+1],[i+1][j],[i+1][j+1] 모두 1이면 정답++
- * 
+ *  0세대 : 0
+ *  1세대 : 01
+ *  2세대 : 0121
+ *  3세대 : 01212321
+ *  
  * @author Gunhoo
  *
  */
@@ -20,23 +28,45 @@ public class BJ_15685_드래곤커브 {
 	// 주의 !!! : x는 오른쪽으로 증가, y 는 아래쪽으로 증가
 	static int[][] direction = {{0, 1}, {-1,0}, {0,-1}, {1,0}};
 	
-	static ArrayList<Curv> curvs = new ArrayList<>();
+	static int[] dx = {1,0,-1,0}; // 우상좌하(0123)
+	static int[] dy = {0,-1,0,1};
+	static ArrayList<Curv> curvs= new ArrayList<>();
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		int n = Integer.parseInt(st.nextToken());
+		int[][] dragonCurvs = new int[n][4];
 		for(int i = 0 ; i<n ; i++) {
 			st = new StringTokenizer(br.readLine());
-			curvs.add(new Curv(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
+			dragonCurvs[i][0]= Integer.parseInt(st.nextToken());
+			dragonCurvs[i][1]= Integer.parseInt(st.nextToken());
+			dragonCurvs[i][2]= Integer.parseInt(st.nextToken());
+			dragonCurvs[i][3]= Integer.parseInt(st.nextToken());
+			makeCurv(dragonCurvs[i]);
 		}
 		
-		makeCurv(); // curv 그려주는 함수
-		System.out.println(count()); // 정답 출력
+		 // curv 그려주는 함수
+//		System.out.println(count()); // 정답 출력
 	}
 	
-	private static void makeCurv() {
-		for(Curv c : curvs) { // curvs에 있는 모든 curv에 대해
-			
+	private static void makeCurv(int[] dragonCurvs) { // 입력에 대해
+		ArrayDeque<Integer> stack = new ArrayDeque<>();
+		stack.add(dragonCurvs[2]); // 방향을 넣어줘
+		/**
+		 * 스택에 있는거를 뒤에서부터 꺼내서 (+1)%4 해주고 기존스택 뒤에 더해줘
+		 */
+		for(int i = 0; i<= dragonCurvs[3]; i++) { // 세대수까지 반복
+			ArrayDeque<Integer> newStack = new ArrayDeque<>();
+			while(!stack.isEmpty()) {
+				int tmp = stack.removeLast();
+				newStack.offerLast((tmp+1)%4);
+				newStack.offerFirst(tmp);
+			}
+			stack = newStack;
+		}
+		for(int i = 0 ; i< stack.size(); i++) {
+			System.out.println("stack: " +stack.removeFirst());
 		}
 	}
 	
