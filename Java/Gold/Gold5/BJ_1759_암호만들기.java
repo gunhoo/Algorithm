@@ -3,6 +3,7 @@ package Gold.Gold5;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -16,47 +17,48 @@ import java.util.StringTokenizer;
  */
 public class BJ_1759_암호만들기 {
 	static int L, C;
-	static ArrayList<Character> consonant, vowel;
-	static boolean[] visited = new boolean[26];
+	static char[] input;
+	static char[] password;
 	static StringBuilder sb = new StringBuilder();
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		L = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
-		vowel = new ArrayList<Character>();
-		consonant = new ArrayList<Character>();
+		password = new char[L];
+		input = new char[C];
 		st = new StringTokenizer(br.readLine());
 		for(int i =0 ; i < C ; i++) {
-			char c = st.nextToken().charAt(0);
-			if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') { // vowel이면
-				vowel.add(c);
-			}else {
-				consonant.add(c);
-			}
+			input[i] = st.nextToken().charAt(0);
 		}
-		Collections.sort(consonant);
-		Collections.sort(vowel);
-		dfs(c, 0);
+		Arrays.sort(input);
+		dfs(0, 0);
 		System.out.print(sb);
 	}
 	
 	
-	private static void dfs(String password, int depth) {
+	private static void dfs(int num, int depth) {
 		if(depth == L) {
-			sb.append(password).append("\n");
+			if( check() ) // 주어진 조건 만족하면 
+				sb.append(password).append("\n"); // 후보에 추가
 			return;
 		}
 		
-		visited[password.charAt(password.length()-1)-'a'] = true; // 방문처리
-		for(int i = 0 ; i < C; i++) {
-			if(!visited[candidates[i].charAt(0)-'a']) {
-				visited[candidates[i].charAt(0)-'a'] = true;
-				dfs( password + candidates[i], depth+1);
-				visited[candidates[i].charAt(0)-'a'] = false;
-			}
+		for(int i = num ; i< C; i++) {
+			password[depth] = input[i]; 
+			dfs(i+1, depth+1); // 하나 선택하고 깊이 추가
 		}
 		
 	}
-	
+	private static boolean check() {
+		int vowel = 0;
+		int consonant = 0;
+		for( char c : password) {
+			if( c == 'a' || c == 'e' || c == 'i' || c == 'o' || c=='u') {
+				vowel++; // 모음 갯수 
+			}else consonant++; // 자음갯수
+		}
+		if( vowel >= 1 && consonant >=2 ) return true; // 주어진 조건 만족하면 true
+		return false; // 만족 못하면 false
+	}
 }
