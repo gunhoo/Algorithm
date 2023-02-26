@@ -16,21 +16,39 @@ import java.util.StringTokenizer;
  *
  */
 public class D2_14510_나무높이 {
-	static int N;
-	static int[] trees;
-	static int max =0;
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
 		int t = Integer.parseInt(br.readLine());
+		int[] trees;
+		int N;
 		for(int test_case = 1; test_case <= t ; test_case++) {
 			N = Integer.parseInt(br.readLine());
+			int max =0, result =0;
 			trees =new int[N];
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			for(int i =0 ; i < N ; i++) {
 				trees[i] = Integer.parseInt(st.nextToken());
 				if(trees[i] > max) max = trees[i]; // max값 갱신
 			}
+			int odd =0, even = 0;
+			for(int i = 0 ; i < N ; i++) {
+				even += (max - trees[i]) / 2;
+				odd += (max - trees[i]) % 2;
+			}
 			
+			if( even > odd) { // 만약 짝수증가일이 더 많으면,
+				while(Math.abs(even - odd) > 1) { // 둘의 개수차이가 1이하일때까지 
+					even--; // 짝수는 하루 빼주고
+					odd += 2; // 홀수는 2씩 증가
+				}
+			}
+			
+			if(odd > even) result = odd * 2 - 1; // 홀수일이 더 많으면 
+			else if(even > odd) result = even * 2; // 짝수일이 더 많으면
+			else result = odd + even; // 둘이 같으면  
+			
+			System.out.println("#" + test_case + " " + result);
 			
 		}
 	}
