@@ -12,7 +12,7 @@ import java.util.StringTokenizer;
  * 거리에 대한 조건이 명시되어있지 않음
  * 맨하탄 거리 아님 
  * 유클리드 거리 아님
- * 
+ * 한칸전진하고, 그 행/열에서 좌우로 봤을 때 가장짧은 거리, 거리가 같다면 가장 오른쪽
  * @author 박건후
  *
  */
@@ -66,7 +66,7 @@ public class D4_13408_먼지없는재택근무 {
 					if(0<=nx && nx<N && 0<=ny && ny<N && ny > robot.y && -1.0<=(nx-robot.x)*1.0/(ny-robot.y) &&(nx-robot.x)*1.0/(ny-robot.y)<=1.0 && !visited[nx][ny]) {
 						q.add(new Node(nx, ny));
 						visited[nx][ny] = true;
-						if(map[nx][ny] == 1) cand.add(new Node(nx, ny));
+						if(map[nx][ny] == 1) cand.add(new Node(nx, ny));//먼지면 후보에 넣어줘
 					}
 				}
 			}
@@ -75,8 +75,11 @@ public class D4_13408_먼지없는재택근무 {
 				public int compare(Node o1, Node o2) {
 					int d1 = Math.abs(o1.x-robot.x)+Math.abs(o1.y-robot.y);
 					int d2 = Math.abs(o2.x-robot.x)+Math.abs(o2.y-robot.y);
-					if( d1==d2) return o1.x-o2.x; // 거리 같으면 가장 오른쪽(x값 가장 큰)
-					return 	d2-d1; // 내림차순정렬
+					if( o1.y==o2.y) {
+						if( Math.abs(o2.x-robot.x)== Math.abs(o1.x-robot.x))return o1.x-o2.x;
+						return Math.abs(o2.x-robot.x)-Math.abs(o1.x-robot.x); // 거리 같으면 가장 오른쪽(x값 가장 큰)
+					}
+					return 	o2.y-o1.y; // 내림차순정렬
 				}
 				
 			});
@@ -100,8 +103,11 @@ public class D4_13408_먼지없는재택근무 {
 				public int compare(Node o1, Node o2) {
 					int d1 = Math.abs(o1.x-robot.x)+Math.abs(o1.y-robot.y);
 					int d2 = Math.abs(o2.x-robot.x)+Math.abs(o2.y-robot.y);
-					if( d1==d2) return o1.y-o2.y;
-					return 	d2-d1; // 내림차순정렬
+					if( o1.x==o2.x) {
+						if(Math.abs(o1.y-robot.y)==Math.abs(o2.y-robot.y)) return o1.y-o2.y;
+						return Math.abs(o2.y-robot.y)-Math.abs(o1.y-robot.y);
+					}
+					return 	o1.x-o2.x; // 내림차순정렬
 				}
 				
 			});
@@ -125,8 +131,11 @@ public class D4_13408_먼지없는재택근무 {
 				public int compare(Node o1, Node o2) {
 					int d1 = Math.abs(o1.x-robot.x)+Math.abs(o1.y-robot.y);
 					int d2 = Math.abs(o2.x-robot.x)+Math.abs(o2.y-robot.y);
-					if( d1==d2) return o2.y-o1.y;
-					return 	d2-d1; // 내림차순정렬
+					if( o1.x==o2.x) {
+						if(Math.abs(o2.y-robot.y)==Math.abs(o1.y-robot.y)) return o2.y-o1.y;
+						return Math.abs(o2.y-robot.y)-Math.abs(o1.y-robot.y);
+					}
+					return 	o2.x-o1.x; // 내림차순정렬
 				}
 				
 			});
@@ -150,8 +159,11 @@ public class D4_13408_먼지없는재택근무 {
 				public int compare(Node o1, Node o2) {
 					int d1 = Math.abs(o1.x-robot.x)+Math.abs(o1.y-robot.y);
 					int d2 = Math.abs(o2.x-robot.x)+Math.abs(o2.y-robot.y);
-					if( d1==d2) return o2.x-o1.x;
-					return 	d2-d1; // 내림차순정렬
+					if( o1.y==o2.y) {
+						if(Math.abs(o1.x-robot.x)==Math.abs(o2.x-robot.x))return o2.x-o1.x;
+						return Math.abs(o2.x-robot.x)-Math.abs(o1.x-robot.x);
+					}
+					return 	o1.y-o2.y; // 내림차순정렬
 				}
 				
 			});
