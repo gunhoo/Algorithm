@@ -21,10 +21,10 @@ public class D4_3289_서로소집합 {
 	}
 	
 	static boolean union(int a, int b){
-		int aRoot = findSet(a);
-		int bRoot = findSet(b);
-		if( aRoot == bRoot) return false;
-		parents[bRoot] = aRoot;
+		int aRoot = findSet(a); // a의 root 
+		int bRoot = findSet(b); // b의 root
+		if( aRoot == bRoot) return false; //  root같으면 같은  subset
+		parents[bRoot] = aRoot; //  다르면 뒤에있는 거를 aroot 넣어줘
 		return true;
 	}
 	
@@ -39,15 +39,16 @@ public class D4_3289_서로소집합 {
 			int n = Integer.parseInt(st.nextToken());
 			int m = Integer.parseInt(st.nextToken());
 			parents = new int[n+1];
-			makeSet(n);
-			for(int i = 0 ; i < m ; i++) {
+			makeSet(n); // n개 집합 만들어줘
+			for(int i = 0 ; i < m ; i++) { // 명령 m 개
 				st =new StringTokenizer(br.readLine());
-				int c = Integer.parseInt(st.nextToken());
-				if( c== 0) union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
-				else {
+				int c = Integer.parseInt(st.nextToken()); // 명령 입력
+				if( c== 0) // 합치기 명령이면 
+					union(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())); // 합쳐
+				else { // 프린트 명령이면
 					if (findSet(Integer.parseInt(st.nextToken())) == findSet(Integer.parseInt(st.nextToken()))) {
-						sb.append(1);
-					}else sb.append(0);
+						sb.append(1); // 만약 같은 집단이라면 1
+					}else sb.append(0); // 다르면 0
 				}
 			}
 			sb.append("\n");
