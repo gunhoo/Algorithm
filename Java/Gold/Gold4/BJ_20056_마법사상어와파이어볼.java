@@ -139,9 +139,9 @@ public class BJ_20056_마법사상어와파이어볼 {
 		int sum = 0;
 		for(int i =0  ; i< N ; i++) {
 			for(int j = 0 ; j< N ; j++) {
-				if(map[i][j].size() > 0) {
-					for(int k =0 ; k < map[i][j].size(); k++) {
-						sum += map[i][j].get(k).m;
+				if(map[i][j].size() > 0) { // 파이어볼이 존재하면,
+					for(int k =0 ; k < map[i][j].size(); k++) { // 파이어볼 수 만큼
+						sum += map[i][j].get(k).m; // 질량 더해줘
 					}
 				}
 			}
