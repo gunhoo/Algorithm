@@ -8,8 +8,8 @@ public class BJ_14499_주사위굴리기 {
 	static int N, M;
 	static int x, y;
 	static int[][] map;
-	static int[] dice = new int[6];
-	static int[] diceIdx = {0,1};
+	static int[] dice = new int[7];
+	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
@@ -30,55 +30,51 @@ public class BJ_14499_주사위굴리기 {
 			execute(Integer.parseInt(st.nextToken()));
 		}
 	}
+	static int[] dy = {1, -1, 0, 0};
+	static int[] dx = {0, 0, -1, 1};
+	
 	private static void execute(int command) {
-		switch(command) {
-		case 1:
-			if( y != M) {
-				y += 1;
-				roll(1);
-				if(map[x][y] == 0) {
-					map[x][y] = dice[diceIdx[1]];
-				}
-			}
-			
-		case 2:
-		case 3:
-		case 4:
-		}
+		int nx = x + dx[command-1];
+		int ny = y + dy[command-1];
+		if(nx <0 || ny < 0 || nx > N-1 || ny > M-1) return;
+		roll(command, nx, ny);
+		x = nx; y = ny;
 	}
-	private static void roll(int num) {
+	
+	private static void roll(int num, int x, int y) {
+		int tmp = dice[3];
 		switch(num) {
-		case 1: // 오른쪽으로 회전
-			switch(diceIdx[0]){
-			case 0: // 맨밑이 0일때
-				if(diceIdx[1] == 1 ) { // 오른쪽이 1이면
-					diceIdx[0] = 1;
-					diceIdx[1] = 5;
-				}else if( diceIdx[1] == 4) { // 오른쪽이 4면
-					diceIdx[0] = 4;
-					diceIdx[1] = 5;
-				}else if( diceIdx[1] == 2) {
-					diceIdx[0] = 2;
-					diceIdx[1] = 5;
-				}else if(diceIdx[1] == 3) {
-					diceIdx[0] = 3;
-					diceIdx[1] = 5;
-				}
-			case 2:
-			case 5:
-			case 4:
-				diceIdx = 1;
-				break;
-			case 1:
-				diceIdx = 6;
-				break;
-			case 3:
-				
-			}
+		case 1:
+			dice[3] = dice[4];
+			dice[4] = dice[6];
+			dice[6] = dice[2];
+			dice[2] = tmp;
 			break;
 		case 2:
+			dice[3] = dice[2];
+			dice[2] = dice[6];
+			dice[6] = dice[4];
+			dice[4] = tmp;
+			break;
 		case 3:
+			dice[3] = dice[5];
+			dice[5] = dice[6];
+			dice[6] = dice[1];
+			dice[1] = tmp;
+			break;
 		case 4:
+			dice[3] = dice[1];
+			dice[1] = dice[6];
+			dice[6] = dice[5];
+			dice[5] = tmp;
+			break;
 		}
+		if(map[x][y] == 0) {
+			map[x][y] = dice[6];
+		} else {
+			dice[6] = map[x][y];
+			map[x][y] =0;
+		}
+		System.out.println(dice[3]);
 	}
 }
