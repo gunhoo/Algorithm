@@ -54,7 +54,7 @@ public class SW_2105_디저트카페 {
 						for(int k = 0 ; k < size2; k++) {
 							nx = nx + dx[dir];
 							ny = ny + dy[dir];
-							if(visited[map[nx][ny]]) continue out; 
+							if(visited[map[nx][ny]]) continue out;
 							visited[map[nx][ny]] = true;
 							if(ny == 0|| nx == N-1 || ny == N-1 || k == size2-1) {
 								dir++;
