@@ -5,10 +5,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class BJ_15654_NM5 {
+public class BJ_15657_N과M8 {
 	static int N, M;
 	static int[] input, numbers;
-	static boolean visited[];
 	
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -18,7 +17,6 @@ public class BJ_15654_NM5 {
 		st = new StringTokenizer(br.readLine());
 		input = new int[N];
 		numbers = new int[M];
-		visited = new boolean[N];
 		
 		for(int i = 0; i<N ;i++) {
 			input[i] = Integer.parseInt(st.nextToken());
@@ -35,14 +33,16 @@ public class BJ_15654_NM5 {
 			return;
 		}
 		for(int i = 0 ; i< N; i++) {
-			if(!visited[i]) {
+			if(cnt == 0)
 				numbers[cnt] = input[i];
-				visited[i] = true;
-			}else {
-				continue;
+			else {
+				if( numbers[cnt-1] <= input[i]) {
+					numbers[cnt] = input[i];
+				}else {
+					continue;
+				}
 			}
 			permutation(cnt+1);
-			visited[i] = false;
 		}
 	}
 }
