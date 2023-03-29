@@ -43,9 +43,9 @@ public class BJ_20058_마법사상어와파이어스톰 {
 		visited = new boolean[mapSize][mapSize];
 		for(int i =0; i < Q; i++) {
 			int L = Integer.parseInt(st.nextToken());
-			fireStorm(0, 0, L); // 돌리기
+			if(L != 0) fireStorm(0, 0, L); // 돌리기
 			sinking(); // 0이거나 바깥으로간 칸이 2개이상인 칸들을 -1해줌
-			print();
+//			print();
 		}
 		getDummySize();
 		System.out.println(remainIce); 
