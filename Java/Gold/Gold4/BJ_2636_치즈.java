@@ -1,95 +1,94 @@
 package Gold.Gold4;
 
-import java.awt.Point;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.io.OutputStreamWriter;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class BJ_2636_치즈 {
 	static int N, M;
 	static int[][] map;
-	static int totalCheese=0, beforeCheese=0;
 	static boolean[][] visited;
-	
-	public static void main(String[] args) throws Exception{
+	static int cheeseCnt;
+	static int[] dx = { -1, 0, 1, 0 };
+	static int[] dy = { 0, 1, 0, -1 };
+
+	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st= new StringTokenizer(br.readLine());
-		int time =0;
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		map = new int[N][M];
-		for(int i =0 ; i < N; i++) {
-			st= new StringTokenizer(br.readLine());
-			for(int j =0; j < M ; j++) {
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			for (int j = 0; j < M; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if(map[i][j]== 1) {
-					totalCheese++;
-				}
 			}
 		}
-		while(time<3) {
-			visited= new boolean[N][M];
-			beforeCheese = 0;
-			melting();
-			time++;
-			print();
+		visited = new boolean[N][M];
+
+		int ans;
+		for (ans = 0; isCheese(); ans++) {
+			// 초기 세팅
+			for (boolean[] arr : visited) {
+				Arrays.fill(arr, false);
+			}
+			visited[0][0] = true;
+			cheeseCnt = 0;
+			DFS(0, 0);
 		}
-		System.out.println(time);
-		System.out.println(beforeCheese);
+
+		System.out.println(ans + "\n" + cheeseCnt + "\n");
+
 	}
 
-	private static int[] dx = {1,-1,0,0}; 
-	private static int[] dy = {0,0,-1,1};
-	
-	private static void melting() {
-		Queue<Point> melting = new ArrayDeque<>();
-		for(int i =0 ; i < N ; i++) {
-			for(int j =0 ; j < M ; j++) {
-				if(map[i][j] == 1 && !visited[i][j]) {
-					Queue<Point> q = new ArrayDeque<>();
-					visited[i][j] = true;
-					q.add(new Point(i, j));
-					while(!q.isEmpty()) {
-						Point ice = q.poll();
-						for(int i1 =0 ;i1 < 4; i1++) {
-							int nx = ice.x + dx[i1];
-							int ny = ice.y + dy[i1];
-							if(0<= nx && nx < N && ny>=0 && ny< M && map[nx][ny] == 1 && visited[nx][ny] == false) {
-								visited[nx][ny] = true;
-								q.add(new Point(nx, ny));
-								for(int j1 = 0 ; j1 < 4; j1++) {
-									int nnx = nx + dx[j1];
-									int nny = ny + dy[j1];
-									if(0<= nnx && nnx < N && nny>=0 && nny< M && map[nnx][nny] == 0) {
-										melting.add(new Point(nx, ny));
-										break;
-									}
-								}
-							}
-						}
-					}
+	public static boolean isCheese() {
+		// map[i][j] = 2로 표시된 부분은 공기와 맞닿은 치즈이므로
+		// 먼저 공기로 바꿔줘야 함.
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 2) {
+					map[i][j] = 0;
 				}
 			}
 		}
-		
-		while(!melting.isEmpty()) {
-			Point p = melting.poll();
-			System.out.println(p.x+" "+p.y);
-			map[p.x][p.y] = 0;
-			totalCheese--;
-			beforeCheese++;
-		}
-	}
-	
-	private static void print() {
-		for(int i =0 ; i < N ;i++) {
-			for(int j = 0; j < M; j++) {
-				System.out.print(map[i][j]+" ");
+
+		// 판 위에 치즈가 존재하는지 체크.
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < M; j++) {
+				if (map[i][j] == 1) {
+					return true;
+				}
 			}
-			System.out.println();
 		}
-		System.out.println();
+
+		return false;
 	}
+
+	// (0, 0)부터 시작해서 공기와 맞닿은 치즈를 찾음.
+	public static void DFS(int x, int y) {
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+
+			// 범위를 벗어나는 경우
+			if (nx < 0 || ny < 0 || nx >= N || ny >= M) {
+				continue;
+			}
+
+			if (!visited[nx][ny]) {
+				visited[nx][ny] = true;
+				if (map[nx][ny] == 1) {
+					map[nx][ny] = 2;
+					cheeseCnt++; // 다음에 지워질 치즈의 개수
+				} else {
+					DFS(nx, ny);
+				}
+			}
+		}
+	}
+
 }
