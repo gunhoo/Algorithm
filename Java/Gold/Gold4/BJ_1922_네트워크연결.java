@@ -30,26 +30,25 @@ public class BJ_1922_네트워크연결 {
 		edgeList = new Edge[E];
 		parents = new int[V+1];
 		for(int i =1; i <= V; i++) {
-			parents[i] = i;
+			parents[i] = i; // 초기화
 		}
 		for(int i =0 ; i < E; i++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int a = Integer.parseInt(st.nextToken());
 			int b = Integer.parseInt(st.nextToken());
 			int c = Integer.parseInt(st.nextToken());
-			edgeList[i] = new Edge(a,b,c);
+			edgeList[i] = new Edge(a,b,c); // 엣지리스트에 추가
 		}
-		
 		System.out.println(kruskal());
 	}
 	
 	private static int kruskal() {
-		int res =0, cnt = 0;
-		Arrays.sort(edgeList);
-		for(Edge e : edgeList) {
-			if(union(e.from, e.to)) { 
-				res += e.weight;
-				if(++cnt == V-1) return res;
+		int res =0, cnt = 0; 
+		Arrays.sort(edgeList); // 정렬되어있어야함
+		for(Edge e : edgeList) { // 모든 연결 선에 대해
+			if(union(e.from, e.to)) {  // 만약 연결되어 있지 않다면, 연결하고 아래 실행
+				res += e.weight; // 비용추가
+				if(++cnt == V-1) return res; // 모두 골랐으면 return
 			}
 		}
 		return 0;
@@ -58,9 +57,9 @@ public class BJ_1922_네트워크연결 {
 	private static boolean union(int a, int b) {
 		int aRoot = find(a);
 		int bRoot = find(b);
-		if(aRoot == bRoot) return false;
-		parents[aRoot] = bRoot;
-		return true;
+		if(aRoot == bRoot) return false; // 연결되어있으면 false
+		parents[aRoot] = bRoot; // 연결되어있지 않다면 연결하고, 
+		return true;  // true 반환
 	}
 	
 	private static int find(int a) {
