@@ -39,12 +39,12 @@ public class BJ_16930_달리기 {
 				answer = Math.min(answer, node.second);
 				continue;
 			}
-			out: for(int i =0 ;i < 4 ;i++) {
+			for(int i =0 ;i < 4 ;i++) {
 				for(int k = 1 ; k <= K ; k++) {
 					int nx = node.x + direction[i][0]*k;
 					int ny = node.y + direction[i][1]*k;
 					if(0>nx || N<=nx || 0>ny || ny>=M || map[nx][ny].second == node.second+1) continue;
-					if( map[nx][ny].c != '.'|| map[nx][ny].second < node.second+1) continue out;
+					if( map[nx][ny].c != '.'|| map[nx][ny].second < node.second+1) break;
 					map[nx][ny].second = node.second+1;
 					q.offer(new Node(nx, ny, node.second+1, '.'));
 				}
@@ -60,7 +60,7 @@ public class BJ_16930_달리기 {
 		}
 		System.out.println();
 	}
-	private static void input()throws Exception {
+	private static void input() throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st= new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
