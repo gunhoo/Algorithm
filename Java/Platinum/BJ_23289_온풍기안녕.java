@@ -46,7 +46,7 @@ public class BJ_23289_온풍기안녕 {
 			manageTemp(); // 온도 조절 메서드
 			deTemp(); // 온도 감소 메서드
 			answer++; // 초콜릿 먹어
-			print();
+//			print();
 			if(isGood() || answer == 101) { // 모든칸이 K이상이거나, 초콜릿 100번 넘어가면
 				break;
 			}
@@ -61,7 +61,7 @@ public class BJ_23289_온풍기안녕 {
 				visited = new boolean[R][C];
 				Queue<Point> q = new ArrayDeque<>();
 				switch(map[i][j].info) {
-				case 1: // 좌
+				case 2: // 좌
 					q.offer(new Point(i, j-1, 5));
 					while(!q.isEmpty()) {
 						Point point = q.poll();
@@ -80,7 +80,7 @@ public class BJ_23289_온풍기안녕 {
 							q.offer(new Point(point.x+1, point.y-1, point.cnt-1));
 					}
 					break;
-				case 2://우
+				case 1://우
 					q.offer(new Point(i, j+1, 5));
 					while(!q.isEmpty()) {
 						Point point = q.poll();
