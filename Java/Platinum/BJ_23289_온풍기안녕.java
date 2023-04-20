@@ -17,17 +17,17 @@ import java.util.StringTokenizer;
  *
  */
 public class BJ_23289_온풍기안녕 {
-	static class Map{
-		int t=0, info;
-		boolean left=false, right=false, up=false, down=false;
-		public Map(int info) {
-			this.info = info;
+	static class Map{ // 지도 클래스
+		int t=0, info; // t: 온도, info:  온풍기 정보
+		boolean left=false, right=false, up=false, down=false; // 벽이 존재하는지 확인하는 메서드
+		public Map(int info) { // 생성자
+			this.info = info; // 온풍기 정보만 담는다
 		}
 	}
-	static class Point{
-		int x, y, cnt;
+	static class Point{ // 온도 증가시키기 위해 만든 클래스
+		int x, y, cnt; // 좌표정보와 온도가 몇 올라야하는지 저장하는 변수
 
-		public Point(int x, int y, int cnt) {
+		public Point(int x, int y, int cnt) { // 생성자
 			super();
 			this.x = x;
 			this.y = y;
@@ -57,10 +57,29 @@ public class BJ_23289_온풍기안녕 {
 	private static void upTemp() {
 		for(int i =0 ;i < R; i++) {
 			for(int j =0 ; j < C; j++) {
-				if(map[i][j].info == 0 || map[i][j].info == 5)continue;
-				visited = new boolean[R][C];
-				Queue<Point> q = new ArrayDeque<>();
-				switch(map[i][j].info) {
+				if(map[i][j].info == 0 || map[i][j].info == 5)continue; // 온풍기가 있는
+				visited = new boolean[R][C]; // 방문체크 
+				Queue<Point> q = new ArrayDeque<>(); // 3방향으로 퍼지니까 이를 담기 위해 선언
+				switch(map[i][j].info) { // 온풍기 정보에 따라
+				case 1://우
+					q.offer(new Point(i, j+1, 5)); // 오른쪽으로 1칸, 5부터 시작 
+					while(!q.isEmpty()) {
+						Point point = q.poll();
+						if(point.cnt == 0) continue; // 0은 증가 안해도 돼
+						if(point.x < 0 || point.x >= R || point.y < 0 || point.y >=C 
+								|| visited[point.x][point.y]) continue; // 범위 밖이거나 방문했으면 패스
+						visited[point.x][point.y] = true; // 방문처리
+						map[point.x][point.y].t += point.cnt; // 온도 증가
+						if(point.x-1 >= 0 && point.y+1<C 
+								&& !map[point.x][point.y].up && !map[point.x-1][point.y+1].left) // 벽이 없으면
+							q.offer(new Point(point.x-1, point.y+1, point.cnt-1));
+						if(!map[point.x][point.y].right) // 벽이 없으면
+							q.offer(new Point(point.x, point.y+1, point.cnt-1));
+						if(point.x+1 < R && point.y+1<C 
+								&& !map[point.x][point.y].down && !map[point.x+1][point.y+1].left) // 벽이 없으면
+							q.offer(new Point(point.x+1, point.y+1, point.cnt-1));
+					}
+					break;
 				case 2: // 좌
 					q.offer(new Point(i, j-1, 5));
 					while(!q.isEmpty()) {
@@ -78,25 +97,6 @@ public class BJ_23289_온풍기안녕 {
 						if(point.x+1 < R && point.y-1>=0 
 								&& !map[point.x][point.y].down && !map[point.x+1][point.y-1].right)
 							q.offer(new Point(point.x+1, point.y-1, point.cnt-1));
-					}
-					break;
-				case 1://우
-					q.offer(new Point(i, j+1, 5));
-					while(!q.isEmpty()) {
-						Point point = q.poll();
-						if(point.cnt == 0) continue;
-						if(point.x < 0 || point.x >= R || point.y < 0 || point.y >=C 
-								|| visited[point.x][point.y]) continue;
-						visited[point.x][point.y] = true;
-						map[point.x][point.y].t += point.cnt;
-						if(point.x-1 >= 0 && point.y+1<C 
-								&& !map[point.x][point.y].up && !map[point.x-1][point.y+1].left)
-							q.offer(new Point(point.x-1, point.y+1, point.cnt-1));
-						if(!map[point.x][point.y].right)
-							q.offer(new Point(point.x, point.y+1, point.cnt-1));
-						if(point.x+1 < R && point.y+1<C 
-								&& !map[point.x][point.y].down && !map[point.x+1][point.y+1].left)
-							q.offer(new Point(point.x+1, point.y+1, point.cnt-1));
 					}
 					break;
 				case 3://상
@@ -142,16 +142,16 @@ public class BJ_23289_온풍기안녕 {
 		}
 	}
 	
-	private static void manageTemp() {
-		int tmap[][] = new int[R][C];
+	private static void manageTemp() { // 온도 조절 메서드: 큰쪽에서 작은쪽으로 (4방향) 값의 차이만큼 퍼진다
+		int tmap[][] = new int[R][C];// 온도만 가지고 있으면 메모리 절약 가능
 		for(int i =0 ; i < R ; i++) {
 			for(int j =0; j  <C; j++) {
-				tmap[i][j] = map[i][j].t;
+				tmap[i][j] = map[i][j].t; 
 			}
 		}
 		for(int i =0 ; i < R; i++) {
 			for(int j =0 ; j < C; j++) {
-				if(map[i][j].t == 0)continue;
+				if(map[i][j].t == 0)continue; // 온도 0이면 안퍼져, 값의 차이 / 4인 점 주의!
 				if(!map[i][j].up && i-1 >=0 && 3 < map[i][j].t-map[i-1][j].t) { // 위로 조절
 					int tmp = (map[i][j].t-map[i-1][j].t)/4;
 					tmap[i-1][j] += tmp;
@@ -177,38 +177,38 @@ public class BJ_23289_온풍기안녕 {
 		}
 		for(int i =0 ; i < R ; i++) {
 			for(int j =0; j<C; j++) {
-				map[i][j].t = tmap[i][j];
+				map[i][j].t = tmap[i][j]; // 맵의 온도 갱신
 			}
 		}
 		
 	}
 	
-	private static void deTemp() {
-		for(int j =0 ; j <C; j++) {
-			if(map[0][j].t != 0)
-				map[0][j].t -= 1;
-			if(map[R-1][j].t != 0)
+	private static void deTemp() { // 가장자리 온도 떨어트리는 메서드
+		for(int j =0 ; j <C; j++) { // 모든 행
+			if(map[0][j].t != 0) // 0이 아닌것에만 1감소해야해, 아니면 마이너스
+				map[0][j].t -= 1; // 1행 모든열 -1감소
+			if(map[R-1][j].t != 0) // 마지막행 모든열 -1감소
 				map[R-1][j].t -= 1;
 		}
-		for(int i = 1; i < R-1; i++) {
-			if(map[i][0].t != 0)
+		for(int i = 1; i < R-1; i++) { // 모든 열
+			if(map[i][0].t != 0) // 1열 모든 행
 				map[i][0].t -= 1;
-			if(map[i][C-1].t != 0)
+			if(map[i][C-1].t != 0) // 마지막열 모든행
 				map[i][C-1].t -= 1;
 		}
 	}
 	
-	private static boolean isGood() {
+	private static boolean isGood() { // 종료조건 만족하는지 확인하는 메서드
 		for(int i =0 ; i < R; i++) {
 			for(int j=0 ; j <C ; j++) {
 				if(map[i][j].info != 5) continue; // 5만 조사하면 돼
 				if(map[i][j].t < K )return false; // 온도가 K 미만인 얘가 존재하면 안돼
 			}
 		}
-		return true;
+		return true; // 모두 통과하면 true
 	}
 	
-	private static void init() throws Exception{
+	private static void init() throws Exception{ // input 메서드
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		R = Integer.parseInt(st.nextToken());
@@ -236,7 +236,7 @@ public class BJ_23289_온풍기안녕 {
 			}
 		}
 	}
-	private static void print() {
+	private static void print() { // 검증 메서드, 지도의 온도를 출력
 		for(int i = 0; i < R; i++) {
 			for(int j =0 ; j < C; j++) {
 				System.out.print(map[i][j].t+" ");
