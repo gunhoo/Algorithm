@@ -41,45 +41,45 @@ public class BJ_19236_청소년상어 {
 		}
 	}
 	static int answer = 0;
-	static List<Fish> fished = new ArrayList<>();
+	static List<Fish> fishes = new ArrayList<>();
 	static Shark shark;
 	static int[][] direction = {{0,0}, {-1,0}, {-1,-1}, {0,-1}, {1,-1}, {1,0}, {1,1}, {0,1}, {-1,1}};
 	static int[][] numbers;
 	
 	public static void main(String[] args) throws Exception{
 		init(); // 입력
-		moveShark(numbers, shark, fished); // dfs
+		moveShark(numbers, shark, fishes); // dfs
 		System.out.println(answer); // 출력
 	}
 	
-	private static void moveFish(Fish fish, int[][] numbers, List<Fish> fishes) {
-		if(fish.isAlive == false) return;
-		for (int i = 0; i < 8; i++) {
-            int dir = fish.dir+i;
-            if(dir>8) dir %= 8;
-            int nx = fish.x + direction[dir][0];
-            int ny = fish.y + direction[dir][1];
-
-            if (0 <= nx && nx < 4 && 0 <= ny && ny < 4 && numbers[nx][ny] != -1) { // 범위안에 있거나, 상어가 아니면
-                numbers[fish.x][fish.y] = 0; // 자신의 위치는 0으로 비워두고,
-                if (numbers[nx][ny] == 0) {// 이동한 곳이 비어있었다면,
-                    fish.x = nx; // 바로 이동
-                    fish.y = ny;
-                } else { // swap해줘야한다면,
-                    Fish temp = fishes.get(numbers[nx][ny] - 1); // 해당 위치 얻어와서
-                    temp.x = fish.x; 
-                    temp.y = fish.y;
-                    numbers[fish.x][fish.y] = temp.number; // 원래있던 곳 이동할 것으로 덮어써
-                    fish.x = nx; // 이동
-                    fish.y = ny;
-                }
-                numbers[nx][ny] = fish.number; // 이동한 곳은 기존 고기사이즈
-                fish.dir = dir; // 방향 갱신
-                break; // 한번만 이동하니 탈출
-            }
-        }
+	private static void init() throws Exception{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st =null;
+		numbers = new int[4][4];
+		for(int i =0 ; i < 4; i++) {
+			st = new StringTokenizer(br.readLine());
+			for(int j =0 ; j < 4; j++) {
+				Fish tmp = new Fish();
+				tmp.number = Integer.parseInt(st.nextToken());
+				tmp.dir = Integer.parseInt(st.nextToken());
+				tmp.x = i;
+				tmp.y = j;
+				fishes.add(tmp);
+				numbers[i][j] = tmp.number;
+			}
+		}
+		Collections.sort(fishes, new Comparator<Fish>() {
+			@Override
+			public int compare(Fish o1, Fish o2) {
+				return o1.number-o2.number;
+			}
+		});
+		Fish eaten = fishes.get(numbers[0][0]-1);
+		shark = new Shark(0,0, eaten.dir, 0);
+		shark.size += eaten.number;
+		eaten.isAlive = false;
+		numbers[0][0] = -1;
 	}
-
 	
 	private static void moveShark(int[][] numbers, Shark shark, List<Fish> fishes) {
 		answer = Math.max(shark.size, answer); // answer 최댓값 갱신
@@ -110,34 +110,34 @@ public class BJ_19236_청소년상어 {
 		}
 	}
 	
-	private static void init() throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st =null;
-		numbers = new int[4][4];
-		for(int i =0 ; i < 4; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j =0 ; j < 4; j++) {
-				Fish tmp = new Fish();
-				tmp.number = Integer.parseInt(st.nextToken());
-				tmp.dir = Integer.parseInt(st.nextToken());
-				tmp.x = i;
-				tmp.y = j;
-				fished.add(tmp);
-				numbers[i][j] = tmp.number;
-			}
-		}
-		Collections.sort(fished, new Comparator<Fish>() {
-			@Override
-			public int compare(Fish o1, Fish o2) {
-				return o1.number-o2.number;
-			}
-		});
-		Fish eaten = fished.get(numbers[0][0]-1);
-		shark = new Shark(0,0, eaten.dir, 0);
-		shark.size += eaten.number;
-		eaten.isAlive = false;
-		numbers[0][0] = -1;
+	private static void moveFish(Fish fish, int[][] numbers, List<Fish> fishes) {
+		if(fish.isAlive == false) return;
+		for (int i = 0; i < 8; i++) {
+            int dir = fish.dir+i;
+            if(dir>8) dir %= 8;
+            int nx = fish.x + direction[dir][0];
+            int ny = fish.y + direction[dir][1];
+
+            if (0 <= nx && nx < 4 && 0 <= ny && ny < 4 && numbers[nx][ny] != -1) { // 범위안에 있거나, 상어가 아니면
+                numbers[fish.x][fish.y] = 0; // 자신의 위치는 0으로 비워두고,
+                if (numbers[nx][ny] == 0) {// 이동한 곳이 비어있었다면,
+                    fish.x = nx; // 바로 이동
+                    fish.y = ny;
+                } else { // swap해줘야한다면,
+                    Fish temp = fishes.get(numbers[nx][ny] - 1); // 해당 위치 얻어와서
+                    temp.x = fish.x; 
+                    temp.y = fish.y;
+                    numbers[fish.x][fish.y] = temp.number; // 원래있던 곳 이동할 것으로 덮어써
+                    fish.x = nx; // 이동
+                    fish.y = ny;
+                }
+                numbers[nx][ny] = fish.number; // 이동한 곳은 기존 고기사이즈
+                fish.dir = dir; // 방향 갱신
+                break; // 한번만 이동하니 탈출
+            }
+        }
 	}
+	
 	
 	private static void print() {
 		for(int i =0 ; i < 4; i++) {
