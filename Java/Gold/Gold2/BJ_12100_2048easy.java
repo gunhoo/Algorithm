@@ -19,6 +19,7 @@ public class BJ_12100_2048easy {
 			}
 		}
 		dfs(map, 0);
+		System.out.println(answer);
 	}
 	
 	private static void dfs(int[][] map, int cnt) {
@@ -49,7 +50,91 @@ public class BJ_12100_2048easy {
 	}
 	
 	private static void up(int[][] map) {
-		
+		for(int i = 0; i < N; i++) {
+            int idx = 0;
+            int tmp = 0;
+            for(int j = 0; j < N; j++) {
+                if(map[j][i] != 0) {
+                    if(tmp == map[j][i]) {
+                        map[idx-1][i] = tmp * 2;
+                        tmp = 0;
+                        map[j][i] = 0;
+                    }
+                    else {
+                    	tmp = map[j][i];
+                        map[j][i] = 0;
+                        map[idx][i] = tmp;
+                        idx++;
+                    }
+                }
+            }
+        }
+	}
+	
+	private static void bot(int[][] map) {
+		 for(int i = 0; i < N; i++) {
+             int idx = N - 1;
+             int tmp = 0;
+             for(int j = N - 1; j >= 0; j--) {
+                 if(map[j][i] != 0) {
+                     if(tmp == map[j][i]) {
+                         map[idx+1][i] = tmp*2;
+                         tmp = 0;
+                         map[j][i] = 0;
+                     }
+                     else {
+                    	 tmp = map[j][i];
+                         map[j][i] = 0;
+                         map[idx][i] = tmp;
+                         idx--;
+                     }
+                 }
+             }
+		 }
+	}
+	
+	private static void left(int[][] map) {
+		for(int i = 0; i < N; i++) {
+            int idx = 0;
+            int tmp = 0;
+            for(int j = 0; j < N; j++) {
+                if(map[i][j] != 0) {
+                    if(tmp == map[i][j]) {
+                        map[i][idx-1] = tmp*2;
+                        tmp = 0;
+                        map[i][j] = 0;
+                    }
+                    else {
+                    	tmp = map[i][j];
+                        map[i][j] = 0;
+                        map[i][idx] = tmp;
+                        idx++;
+                    }
+                }
+            }
+        }
+	}
+
+	private static void right(int[][] map) {
+		for(int i = 0; i < N; i++) {
+            int idx = N - 1;
+            int tmp = 0;
+            for(int j = N - 1; j >= 0; j--) {
+                if(map[i][j] != 0) {
+                    if(tmp == map[i][j]) {
+                        map[i][idx + 1] = tmp * 2;
+                        tmp = 0;
+                        map[i][j] = 0;
+                    }
+                    else {
+                    	tmp = map[i][j];
+                        map[i][j] = 0;
+                        map[i][idx] = tmp;
+                        idx--;
+                    }
+                }
+            }
+        }
 	}
 	
 	private static int cal(int[][] map) {
