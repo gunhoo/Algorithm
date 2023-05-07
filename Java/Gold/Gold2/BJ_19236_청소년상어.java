@@ -75,8 +75,7 @@ public class BJ_19236_청소년상어 {
 			}
 		});
 		Fish eaten = fishes.get(numbers[0][0]-1);
-		shark = new Shark(0,0, eaten.dir, 0);
-		shark.size += eaten.number;
+		shark = new Shark(0,0, eaten.dir, eaten.number);
 		eaten.isAlive = false;
 		numbers[0][0] = -1;
 	}
